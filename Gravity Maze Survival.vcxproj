@@ -78,6 +78,7 @@
     <ClInclude Include="mesh.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="robot.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="suzanne.h" />
     <ClInclude Include="texture.h" />

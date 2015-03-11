@@ -34,6 +34,7 @@
 	#include "floor.h"
 	#include "cube.h"
 	#include "suzanne.h"
+	#include "robot.h"
 #include "player.h"
 #include "world.h"
 

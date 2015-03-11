@@ -10,6 +10,55 @@ public:
 	GLuint uvbuffer;
 	GLuint normalbuffer;
 	GLuint elementbuffer;
+
+	void recursiveMeshProcess(aiNode* node, const aiScene* scene)
+	{
+		// process
+		for (size_t i = 0; i < node->mNumMeshes; i++) {
+			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+			meshProcess(mesh, scene);
+		}
+
+
+
+		// recursion
+		for (size_t i = 0; i < node->mNumChildren; i++) {
+			recursiveMeshProcess(node->mChildren[i], scene);
+		}
+	}
+	void meshProcess(aiMesh* mesh, const aiScene* scene)
+	{
+		for (size_t i = 0; i < mesh->mNumVertices; i++) {
+			glm::vec3 tmp;
+
+			tmp.x = mesh->mVertices[i].x;
+			tmp.y = mesh->mVertices[i].y;
+			tmp.z = mesh->mVertices[i].z;
+			verts.push_back(tmp);
+
+			tmp.x = mesh->mNormals[i].x;
+			tmp.y = mesh->mNormals[i].y;
+			tmp.z = mesh->mNormals[i].z;
+			normals.push_back(tmp);
+
+			glm::vec2 uv;
+			if (mesh->mTextureCoords[0]) {
+				uv.x = mesh->mTextureCoords[0][i].x;
+				uv.y = mesh->mTextureCoords[0][i].y;
+			}
+			else {
+				uv.x = uv.y = 0.0f; 
+			}
+			uvs.push_back(uv);
+		}
+
+		for (size_t i = 0; i < mesh->mNumFaces; i++) {
+			aiFace face = mesh->mFaces[i]; 
+			for (size_t j = 0; j < face.mNumIndices; j++) {
+				tris.push_back(face.mIndices[j]);
+			}
+		}
+	}
 public:
 	bool unindexed = false;
 	std::vector< glm::vec3 > verts;
@@ -114,6 +163,20 @@ public:
 		}
 		unindexed = true;
 		std::cout << "[COMPLETE]\n" << std::endl;
+	}
+	void Load(std::string file_path)
+	{
+		std::cout << "Loading OBJ mesh: " << file_path << std::endl;
+		file_path = "Assets/models/" + file_path;
+		
+		Assimp::Importer importer;
+		const aiScene* scene = importer.ReadFile(file_path, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs);
+		if (!scene) {
+			std::cerr << importer.GetErrorString() << std::endl;
+			return;
+		}
+
+		recursiveMeshProcess(scene->mRootNode, scene);
 	}
 
 	void Update()

@@ -12,9 +12,9 @@ public:
 	}
 	void OnUpdate()
 	{
+		Transform.Rotation.x--;
 		Transform.Rotation.y--;
 		Transform.Rotation.z--;
-		Transform.Rotation.x--;
 	}
 	void OnRender()
 	{

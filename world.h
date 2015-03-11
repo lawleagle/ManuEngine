@@ -11,6 +11,7 @@ private:
 	MFloor Floor, Floor2;
 	MSuzanne Suzanne;
 	MCube Cube;
+	MRobot Robot;
 public:
 	void Awake()
 	{
@@ -21,6 +22,7 @@ public:
 		Floor.Awake();
 		Floor2.Awake(); Floor2.Transform.Position.y += 5;
 		Suzanne.Awake();
+		Robot.Awake();
 	}
 	void Update()
 	{
@@ -31,6 +33,7 @@ public:
 		Floor.Update();
 		Floor2.Update();
 		Suzanne.Update();
+		Robot.Update();
 	}
 	void Render()
 	{
@@ -41,6 +44,7 @@ public:
 		Floor2.Render();
 		Suzanne.Render();
 		Cube.Render();
+		Robot.Render();
 	}
 };
 
