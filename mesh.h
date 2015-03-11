@@ -17,16 +17,21 @@ public:
 	std::vector< glm::vec3 > normals;
 	std::vector< size_t > tris;
 
-	MMesh()
-	{
-		
-	}
+	MMesh() { }
+
+	/// <summary>
+	/// Makes the mesh blank - clears it's 'verts', 'uvs' and 'normals'
+	/// </summary>
 	void Reset()
 	{
 		verts.clear();
 		uvs.clear();
 		normals.clear();
 	}
+
+	/// <summary>
+	/// Loads an OBJ - treats it as an unindexed object
+	/// </summary>
 	void LoadOBJ(std::string file_path)
 	{
 		std::cout << "Loading OBJ mesh: " << file_path << std::endl;
@@ -110,6 +115,7 @@ public:
 		unindexed = true;
 		std::cout << "[COMPLETE]\n" << std::endl;
 	}
+
 	void Update()
 	{
 		if (!verts.size() || !uvs.size() || !normals.size()) {

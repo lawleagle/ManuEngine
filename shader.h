@@ -7,7 +7,9 @@ class MShader
 public:
 	GLuint ProgramID;
 
-
+	/// <summary>
+	/// Creates a shader form a vsh and a fsh - places it in ProgramID
+	/// </summary>
 	void Create(std::string vertex_file_path, std::string fragment_file_path)
 		{
 			GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -82,11 +84,13 @@ public:
 			glDeleteShader(VertexShaderID);
 			glDeleteShader(FragmentShaderID);
 		}
+
 	MShader(std::string vertex_file_path = "", std::string fragment_file_path = "") {
 		if (vertex_file_path != "" && fragment_file_path != "") {
 			Create(vertex_file_path, fragment_file_path);
 		}
 	}
+
 	void Use() {
 		glUseProgram(ProgramID);
 	}

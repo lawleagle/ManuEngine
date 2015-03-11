@@ -190,6 +190,9 @@ public:
 		if (image_path.size() == 0) return;
 		Load(image_path);
 	}
+	/// <summary>
+	/// Loads a texture - can be found in 'TextureID'
+	/// <summary>
 	void Load(std::string image_path = "")
 	{
 		if (image_path.size() == 0) return;
@@ -217,10 +220,13 @@ public:
 
 		if (!FreeImageLoad(image_path.c_str()))
 		{
-			std::cerr << "Invalid texture format. Valid formats: BMP, DDS." << std::endl;
+			std::cerr << "Invalid texture format. Try BMP or DDS." << std::endl;
 			return;
 		}
 	}
+	/// <summary>
+	/// Sets 'TextureID' as current texture.
+	/// </summary>
 	void Use()
 	{
 		glBindTexture(GL_TEXTURE_2D, TextureID);

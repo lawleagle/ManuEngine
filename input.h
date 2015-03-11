@@ -8,6 +8,9 @@ protected:
 	std::bitset<512> keysDown;
 	std::bitset<512> keysUp;
 public:
+	/// <summary>
+	/// Set to false to free the mouse
+	/// </summary>
 	bool mouseControl = true;
 	
 
@@ -16,6 +19,9 @@ public:
 		glfwSetInputMode(Window, GLFW_STICKY_KEYS, GL_TRUE);
 	}
 
+	/// <summary>
+	/// Returns true at the moment 'key' is pressed
+	/// </summary>
 	bool GetKeyDown(int key)
 	{
 		if (GetKey(key) && keysDown[key] == false) {
@@ -27,6 +33,10 @@ public:
 		}
 		return false;
 	}
+
+	/// <summary>
+	/// Returns true at the moment 'key' is released
+	/// </summary>
 	bool GetKeyUp(int key)
 	{
 		if (!GetKey(key) && keysUp[key] == true) {
@@ -38,10 +48,18 @@ public:
 		}
 		return false;
 	}
+
+	/// <summary>
+	/// Checks if 'key' is being pressed
+	/// </summary>
 	bool GetKey(int key)
 	{
 		return glfwGetKey(Window, key) == GLFW_PRESS;
 	}
+
+	/// <summary>
+	/// Provides mouse offset if 'moseControl' is true
+	/// </summary>
 	void GetMouseOffset(double &mouseX, double &mouseY)
 	{
 		int width, height;
