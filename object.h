@@ -1,17 +1,18 @@
 #ifndef MOBJECT_H
 #define MOBJECT_H
 
-extern MCamera Camera;
 class MObject
 {
 protected:
 	MMesh Mesh;
-	MTransform Transform;
 	MTexture Texture;
 
 	virtual void OnAwake() {}
 	virtual void OnUpdate() {}
+	virtual void OnRender() {}
 public:
+	MTransform Transform;
+
 	bool hasTransparency = false;
 	MObject()
 	{
@@ -29,6 +30,7 @@ public:
 	}
 	void Render()
 	{
+		OnRender();
 		if (hasTransparency) {
 			glEnable(GL_BLEND);
 			glDepthMask(0);

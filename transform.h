@@ -33,10 +33,40 @@ public:
 		glm::vec3 Right = glm::vec3(RotationMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
 		return glm::normalize(Right);
 	}
-	MTransform()
+
+
+	MTransform(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f))
 	{
+		Position = position;
+		Rotation = rotation;
+		Scale = scale;
 		Update();
 	}
+	void operator+= (const MTransform transform)
+	{
+		Position += transform.Position;
+		Rotation += transform.Rotation;
+		Scale += transform.Scale;
+		Update();
+	}
+	MTransform operator+ (const MTransform transform) const 
+	{
+		MTransform result;
+		result.Position = Position + transform.Position;
+		result.Rotation = Rotation + transform.Rotation;
+		result.Scale = Scale + transform.Scale;
+		result.Update();
+		return result;
+	}
+	void operator= (const MTransform transform)
+	{
+		Position = transform.Position;
+		Rotation = transform.Rotation;
+		Scale = transform.Scale;
+		Update();
+	}
+
+
 	void Update()
 	{
 		PositionMatrix = glm::translate(Position);

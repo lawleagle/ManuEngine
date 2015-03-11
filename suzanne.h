@@ -16,6 +16,9 @@ public:
 		Transform.Rotation.z--;
 		Transform.Rotation.x--;
 	}
+	void OnRender()
+	{
+	}
 };
 
 #endif

@@ -5,29 +5,40 @@
 class MWorld
 {
 private:
-	MFloor Floor;
+	MDirectionalLight SunLight;
+	MPlayer Player;
+
+	MFloor Floor, Floor2;
 	MSuzanne Suzanne;
 	MCube Cube;
-	MDirectionalLight SunLight;
 public:
 	void Awake()
 	{
 		SunLight.Awake();
-		Floor.Awake();
-		Suzanne.Awake();
+		Player.Awake();
+
 		Cube.Awake();
+		Floor.Awake();
+		Floor2.Awake(); Floor2.Transform.Position.y += 5;
+		Suzanne.Awake();
 	}
 	void Update()
 	{
 		SunLight.Update();
-		Floor.Update();
-		Suzanne.Update();
+		Player.Update();
+
 		Cube.Update();
+		Floor.Update();
+		Floor2.Update();
+		Suzanne.Update();
 	}
 	void Render()
 	{
 		SunLight.Render();
+		Player.Render();
+
 		Floor.Render();
+		Floor2.Render();
 		Suzanne.Render();
 		Cube.Render();
 	}

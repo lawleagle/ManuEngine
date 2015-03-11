@@ -23,21 +23,18 @@
 
 #include "time.h"
 #include "input.h"
-
 #include "shader.h"
 #include "transform.h"
 #include "light.h"
-	#include "directionallight.h"
+#include "directionallight.h"
 #include "camera.h"
-
-
 #include "texture.h"
 #include "mesh.h"
 #include "object.h"
 	#include "floor.h"
 	#include "cube.h"
 	#include "suzanne.h"
-
+#include "player.h"
 #include "world.h"
 
 
@@ -46,6 +43,8 @@ MTime Time;
 MInput Input;
 MShader Shader;
 MCamera Camera;
+
+
 MWorld World;
 
 
@@ -77,13 +76,13 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	
 	Input.Awake();
 	Shader.Create("red.vsh", "red.fsh"); Shader.Use();
-	Camera.Awake();
+	//Camera.Awake();
 	World.Awake();
 
 	
@@ -94,7 +93,7 @@ int main()
 		if (Input.GetKeyDown(GLFW_KEY_F)) Input.mouseControl ^= true;
 		Time.Update();
 
-		Camera.Update();
+		//Camera.Update();
 		World.Update();
 
 		World.Render();
