@@ -2,7 +2,6 @@
 #define MLIGHT_H
 
 
-extern MShader Shader;
 class MLight
 {
 protected:

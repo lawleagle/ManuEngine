@@ -2,6 +2,7 @@
 #define	MWORLD_H
 
 
+extern MShader Shader;
 class MWorld
 {
 private:
@@ -16,9 +17,19 @@ private:
 public:
 	void Awake()
 	{
-		SunLight.Awake();
+		Shader.Create("red.vsh", "red.fsh", "red");
+		Shader.Create("plain.vsh", "plain.fsh", "plain");
+
+
 		Player.Awake();
+
+
+		Shader.Use("plain");
 		Skybox.Awake();
+
+
+		Shader.Use("red");
+		SunLight.Awake();
 
 		Cube.Awake();
 		Floor.Awake();
@@ -28,9 +39,15 @@ public:
 	}
 	void Update()
 	{
-		SunLight.Update();
 		Player.Update();
+
+
+		Shader.Use("plain");
 		Skybox.Update(Player.Transform.Position);
+
+
+		Shader.Use("red");
+		SunLight.Update();
 
 		Cube.Update();
 		Floor.Update();
@@ -40,9 +57,13 @@ public:
 	}
 	void Render()
 	{
+		Shader.Use("plain");
+		Skybox.Render();
+
+
+		Shader.Use("red");
 		SunLight.Render();
 		Player.Render();
-		Skybox.Render();
 
 		Floor.Render();
 		Floor2.Render();

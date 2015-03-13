@@ -88,5 +88,7 @@
     <None Include="red.vsh">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="plain.vsh" />
+    <None Include="plain.fsh" />
   </ItemGroup>
 </Project>

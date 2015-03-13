@@ -90,6 +90,8 @@
   <ItemGroup>
     <None Include="blue.fsh" />
     <None Include="blue.vsh" />
+    <None Include="plain.fsh" />
+    <None Include="plain.vsh" />
     <None Include="red.fsh" />
     <None Include="red.vsh" />
   </ItemGroup>

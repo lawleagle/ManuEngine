@@ -15,6 +15,11 @@ public:
 		Face[3].Texture.Load(right_filepath);
 		Face[4].Texture.Load(top_filepath);
 		Face[5].Texture.Load(bottom_filepath);
+
+		for (int i = 0; i < 6; i++) {
+			Face[i].Texture.SetTextureParamter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			Face[i].Texture.SetTextureParamter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		}
 		
 
 

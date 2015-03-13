@@ -40,8 +40,12 @@ public:
 		ComputeMatrices();
 		CameraMatrix = Projection * View;
 
-		CameraMatrixID = glGetUniformLocation(Shader.ProgramID, "CameraMatrix");
-		glUniformMatrix4fv(CameraMatrixID, 1, GL_FALSE, &CameraMatrix[0][0]);
+		for (int i = 0; i < Shader.Name.size(); i++) {
+			Shader.Use(Shader.Name[i]);
+			CameraMatrixID = glGetUniformLocation(Shader.ProgramID, "CameraMatrix");
+			glUniformMatrix4fv(CameraMatrixID, 1, GL_FALSE, &CameraMatrix[0][0]);
+		}
+		
 	}
 };
 

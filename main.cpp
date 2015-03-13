@@ -83,7 +83,7 @@ int main()
 
 	
 	Input.Awake();
-	Shader.Create("red.vsh", "red.fsh"); Shader.Use();
+	
 	//Camera.Awake();
 	World.Awake();
 

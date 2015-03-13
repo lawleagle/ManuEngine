@@ -208,9 +208,9 @@ public:
 	}
 	void Render()
 	{
-		if (!verts.size() || !uvs.size() || !normals.size()) {
+		/*if (!verts.size() || !uvs.size() || !normals.size()) {
 			return;
-		}
+		}*/
 
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);

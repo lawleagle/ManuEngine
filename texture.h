@@ -140,7 +140,7 @@ protected:
 		free(buffer);
 		std::cout << "[COMPLETE]\n" << std::endl;
 	}
-	bool FreeImageLoad(const char* image_path)
+	bool FreeImageLoad(const char* image_path, bool generate_mipmaps = true)
 	{
 		FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(image_path, 0);
 		FIBITMAP* dib(0);
@@ -177,13 +177,17 @@ protected:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);*/
 		glGenerateMipmap(GL_TEXTURE_2D);
+		
 
 
 		FreeImage_Unload(dib);
 		std::cout << "[COMPLETE]\n" << std::endl;
 		return true;
 	}
+	
 public:
 
 
@@ -192,6 +196,8 @@ public:
 		if (image_path.size() == 0) return;
 		Load(image_path);
 	}
+	
+	
 	/// <summary>
 	/// Loads a texture - can be found in 'TextureID'
 	/// <summary>
@@ -226,6 +232,12 @@ public:
 			return;
 		}
 	}
+	void SetTextureParamter(GLenum parameter, GLenum value)
+	{
+		glTexParameteri(GL_TEXTURE_2D, parameter, value);
+		Use();
+	}
+
 	/// <summary>
 	/// Sets 'TextureID' as current texture.
 	/// </summary>
