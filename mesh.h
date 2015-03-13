@@ -177,6 +177,7 @@ public:
 		}
 
 		recursiveMeshProcess(scene->mRootNode, scene);
+		std::cout << "[COMPLETE]\n" << std::endl;
 	}
 
 	void Update()
