@@ -35,6 +35,7 @@
 	#include "cube.h"
 	#include "suzanne.h"
 	#include "robot.h"
+#include "skybox.h"
 #include "player.h"
 #include "world.h"
 

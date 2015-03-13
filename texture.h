@@ -9,6 +9,9 @@
 class MTexture
 {
 protected:
+	GLuint TextureID;
+	GLuint SamplerID;
+
 	void LoadBMP(std::string image_path = "")
 	{
 		if (image_path.size() == 0) return;
@@ -182,7 +185,6 @@ protected:
 		return true;
 	}
 public:
-	GLuint TextureID;
 
 
 	MTexture(std::string image_path = "")

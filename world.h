@@ -7,6 +7,7 @@ class MWorld
 private:
 	MDirectionalLight SunLight;
 	MPlayer Player;
+	MSkybox Skybox;
 
 	MFloor Floor, Floor2;
 	MSuzanne Suzanne;
@@ -17,6 +18,7 @@ public:
 	{
 		SunLight.Awake();
 		Player.Awake();
+		Skybox.Awake();
 
 		Cube.Awake();
 		Floor.Awake();
@@ -28,6 +30,7 @@ public:
 	{
 		SunLight.Update();
 		Player.Update();
+		Skybox.Update(Player.Transform.Position);
 
 		Cube.Update();
 		Floor.Update();
@@ -39,6 +42,7 @@ public:
 	{
 		SunLight.Render();
 		Player.Render();
+		Skybox.Render();
 
 		Floor.Render();
 		Floor2.Render();

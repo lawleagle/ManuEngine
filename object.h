@@ -4,14 +4,13 @@
 class MObject
 {
 protected:
-	MMesh Mesh;
-	MTexture Texture;
-
 	virtual void OnAwake() {}
 	virtual void OnUpdate() {}
 	virtual void OnRender() {}
 public:
 	MTransform Transform;
+	MTexture Texture;
+	MMesh Mesh;
 
 	bool hasTransparency = false;
 	MObject()
