@@ -5,7 +5,7 @@
 extern MShader Shader;
 class MWorld
 {
-private:
+protected:
 	MDirectionalLight SunLight;
 	MPlayer Player;
 	MSkybox Skybox;
@@ -15,6 +15,7 @@ private:
 	MCube Cube;
 	MRobot Robot;
 public:
+	MSphere Sphere;
 	void Awake()
 	{
 		Shader.Create("red.vsh", "red.fsh", "red");
@@ -33,9 +34,9 @@ public:
 
 		Cube.Awake();
 		Floor.Awake();
-		Floor2.Awake(); Floor2.Transform.Position.y += 5;
 		Suzanne.Awake();
 		Robot.Awake();
+		Sphere.Awake();
 	}
 	void Update()
 	{
@@ -51,9 +52,9 @@ public:
 
 		Cube.Update();
 		Floor.Update();
-		Floor2.Update();
 		Suzanne.Update();
 		Robot.Update();
+		Sphere.Update();
 	}
 	void Render()
 	{
@@ -66,10 +67,10 @@ public:
 		Player.Render();
 
 		Floor.Render();
-		Floor2.Render();
 		Suzanne.Render();
 		Cube.Render();
 		Robot.Render();
+		Sphere.Render();
 	}
 };
 

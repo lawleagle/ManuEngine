@@ -93,7 +93,7 @@ public:
 	MShader() { }
 
 	void Use(std::string _name) {
-		int i = 0;
+		size_t i = 0;
 		for (i = 0; i < Name.size(); i++) {
 			if (Name[i] == _name) {
 				break;

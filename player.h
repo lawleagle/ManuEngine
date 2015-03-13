@@ -5,7 +5,7 @@
 extern MCamera Camera;
 class MPlayer
 {
-private:
+protected:
 public:
 	MTransform Transform;
 	float speed = 6.0f;

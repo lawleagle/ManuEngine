@@ -19,6 +19,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <freeimage.h>
+#include <GL/GLU.h>
+#include <bullet/btBulletDynamicsCommon.h>
+#include <bullet/LinearMath/btHashMap.h>
 
 
 #include "time.h"
@@ -35,6 +38,7 @@
 	#include "cube.h"
 	#include "suzanne.h"
 	#include "robot.h"
+	#include "sphere.h"
 #include "skybox.h"
 #include "player.h"
 #include "world.h"
@@ -48,6 +52,14 @@ MCamera Camera;
 
 
 MWorld World;
+MSphere Sphere;
+
+
+btBroadphaseInterface* broadphase = new btDbvtBroadphase();
+btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
 
 int main()
@@ -78,14 +90,33 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	
 	Input.Awake();
-	
-	//Camera.Awake();
 	World.Awake();
+	Sphere.Awake(); Sphere.Transform.Position = glm::vec3(-4.0f, 0.0f, 0.0f);
+
+
+	dynamicsWorld->setGravity(btVector3(0, -10, 0));
+
+	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+	btCollisionShape* fallShape = new btSphereShape(1);
+	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -2, 0)));
+	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
+	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+	dynamicsWorld->addRigidBody(groundRigidBody);
+	btDefaultMotionState* fallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
+	btScalar mass = 1;
+	btVector3 fallInertia(0, 0, 0);
+	fallShape->calculateLocalInertia(mass, fallInertia);
+	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
+	btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
+	dynamicsWorld->addRigidBody(fallRigidBody);
+
+
+		
 
 	
 	do {
@@ -93,16 +124,44 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (Input.GetKeyDown(GLFW_KEY_F)) Input.mouseControl ^= true;
-		Time.Update();
 
-		//Camera.Update();
+		Time.Update();
 		World.Update();
 
 		World.Render();
 
+		dynamicsWorld->stepSimulation(1 / 60.f, 10);
+
+		btTransform trans;
+		fallRigidBody->getMotionState()->getWorldTransform(trans);
+		Sphere.Transform.Position.y = trans.getOrigin().getY();
+		Sphere.Update();
+		Sphere.Render();
+
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
 	} while (Input.GetKey(GLFW_KEY_ESCAPE) == false && glfwWindowShouldClose(Window) == false);
+
+
+	dynamicsWorld->removeRigidBody(fallRigidBody);
+	delete fallRigidBody->getMotionState();
+	delete fallRigidBody;
+
+	dynamicsWorld->removeRigidBody(groundRigidBody);
+	delete groundRigidBody->getMotionState();
+	delete groundRigidBody;
+
+
+	delete fallShape;
+
+	delete groundShape;
+
+
+	delete dynamicsWorld;
+	delete solver;
+	delete collisionConfiguration;
+	delete dispatcher;
+	delete broadphase;
 
 
 	glfwTerminate();
