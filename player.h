@@ -36,6 +36,7 @@ public:
 		if (Transform.Rotation.x < -90.0f) Transform.Rotation.x = -90.0f;
 		if (Transform.Rotation.x > 90.0f) Transform.Rotation.x = 90.0f;
 
+		speed *= (1.0 + 0.08 * Input.GetScroll(SCROLL_Y));
 
 		if (Input.GetKey(GLFW_KEY_W)) {
 			Transform.Position += Direction * Time.deltaTime * speed;

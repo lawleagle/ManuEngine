@@ -62,6 +62,8 @@ btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintS
 btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
 
+
+
 int main()
 {
 	if (!glfwInit()) {
@@ -80,6 +82,7 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(Window);
+	glfwSetScrollCallback(Window, scroll_callback);
 
 	glewExperimental = true;
 	if (glewInit() != GLEW_OK) {
@@ -93,7 +96,6 @@ int main()
 	glEnable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	
 	Input.Awake();
 	World.Awake();
 	Sphere.Awake(); Sphere.Transform.Position = glm::vec3(-4.0f, 0.0f, 0.0f);

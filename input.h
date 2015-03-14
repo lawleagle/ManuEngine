@@ -1,12 +1,22 @@
 #ifndef MINPUT_H
 #define MINPUT_H
 
+
+enum MouseScroll
+{
+	SCROLL_X,
+	SCROLL_Y
+};
+
+
 extern GLFWwindow* Window;
 class MInput
 {
 protected:
 	std::bitset<512> keysDown;
 	std::bitset<512> keysUp;
+	double scrollX;
+	double scrollY;
 public:
 	/// <summary>
 	/// Set to false to free the mouse
@@ -18,6 +28,7 @@ public:
 	{
 		glfwSetInputMode(Window, GLFW_STICKY_KEYS, GL_TRUE);
 	}
+	
 
 	/// <summary>
 	/// Returns true at the moment 'key' is pressed
@@ -79,7 +90,39 @@ public:
 			mouseY = 0.0;
 		}
 	}
+	double GetScroll(MouseScroll axis)
+	{
+		if (axis == SCROLL_Y) {
+			double aux = scrollY;
+			scrollY = 0;
+			return aux;
+		}
+		else if (axis == SCROLL_X) {
+			double aux = scrollX;
+			scrollX = 0;
+			return aux;
+		}
+		return 0;
+	}
+	void SetScroll(MouseScroll axis, double val)
+	{
+		if (axis == SCROLL_X) {
+			scrollX = val;
+		}
+		else if (axis == SCROLL_Y)
+		{
+			scrollY = val;
+		}
+	}
 };
+
+
+extern MInput Input;
+void scroll_callback(GLFWwindow* window, double x, double y)
+{
+	Input.SetScroll(SCROLL_X, x);
+	Input.SetScroll(SCROLL_Y, y);
+}
 
 
 #endif
