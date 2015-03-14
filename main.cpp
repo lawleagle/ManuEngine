@@ -82,7 +82,6 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(Window);
-	glfwSetScrollCallback(Window, scroll_callback);
 
 	glewExperimental = true;
 	if (glewInit() != GLEW_OK) {

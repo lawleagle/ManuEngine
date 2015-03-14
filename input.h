@@ -17,6 +17,7 @@ protected:
 	std::bitset<512> keysUp;
 	double scrollX;
 	double scrollY;
+	static void scroll_callback(GLFWwindow* window, double x, double y);
 public:
 	/// <summary>
 	/// Set to false to free the mouse
@@ -27,6 +28,7 @@ public:
 	void Awake()
 	{
 		glfwSetInputMode(Window, GLFW_STICKY_KEYS, GL_TRUE);
+		glfwSetScrollCallback(Window, scroll_callback);
 	}
 	
 
@@ -118,10 +120,14 @@ public:
 
 
 extern MInput Input;
-void scroll_callback(GLFWwindow* window, double x, double y)
+void scrollCallback(double x, double y)
 {
 	Input.SetScroll(SCROLL_X, x);
 	Input.SetScroll(SCROLL_Y, y);
+}
+void MInput::scroll_callback(GLFWwindow* window, double x, double y)
+{
+	scrollCallback(x, y);
 }
 
 
