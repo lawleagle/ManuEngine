@@ -15,7 +15,7 @@ public:
 	void Awake()
 	{
 		Camera.Awake();
-		Transform.Position = glm::vec3(0.0f, 0.0f, 5.0f);
+		Transform.Position = glm::vec3(0.0f, 1.0f, 0.0f);
 		Transform.Rotation = glm::vec3(0.0f, 180.0f, 0.0f);
 
 		Camera.Transform = Transform;
@@ -36,7 +36,7 @@ public:
 		if (Transform.Rotation.x < -90.0f) Transform.Rotation.x = -90.0f;
 		if (Transform.Rotation.x > 90.0f) Transform.Rotation.x = 90.0f;
 
-		speed *= (1.0 + 0.08 * Input.GetScroll(SCROLL_Y));
+		speed *= (float)(1.0 + 0.08 * Input.GetScroll(SCROLL_Y));
 
 		if (Input.GetKey(GLFW_KEY_W)) {
 			Transform.Position += Direction * Time.deltaTime * speed;

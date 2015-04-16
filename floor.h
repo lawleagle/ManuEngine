@@ -2,6 +2,7 @@
 #define MFLOOR_H
 
 
+
 class MFloor : public MObject
 {
 public:
@@ -29,8 +30,8 @@ public:
 		};
 		Mesh.tris = { 0, 1, 2, 3, 2, 1 };
 
-		Transform.Position.y = -1;
-		Transform.Scale = glm::vec3(0.25f, 0.25f, 0.25f);
+
+		Collision.CreateCollisionMesh(COLLISION_PLANE, 200.0f, 200.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 	}
 };
 

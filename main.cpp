@@ -2,6 +2,8 @@
 #define GLM_FORCE_RADIANS
 
 
+#include <cstdlib>
+#include <ctime>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -15,6 +17,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -23,7 +26,8 @@
 #include <bullet/btBulletDynamicsCommon.h>
 #include <bullet/LinearMath/btHashMap.h>
 
-
+#include "utility.h"
+#include "random.h"
 #include "time.h"
 #include "input.h"
 #include "shader.h"
@@ -31,6 +35,7 @@
 #include "light.h"
 #include "directionallight.h"
 #include "camera.h"
+#include "collision.h"
 #include "texture.h"
 #include "mesh.h"
 #include "object.h"
@@ -39,6 +44,7 @@
 	#include "suzanne.h"
 	#include "robot.h"
 	#include "sphere.h"
+	#include "asteroid.h"
 #include "skybox.h"
 #include "player.h"
 #include "world.h"
@@ -47,19 +53,30 @@
 GLFWwindow* Window;
 MTime Time;
 MInput Input;
+MRandom Random;
 MShader Shader;
 MCamera Camera;
 
 
 MWorld World;
-MSphere Sphere;
+
+btDynamicsWorld* DynamicsWorld;
+btDispatcher* Dispatcher;
+btCollisionConfiguration* CollisionConfiguration;
+btBroadphaseInterface* Broadphase;
+btConstraintSolver* Solver;
+std::vector<btRigidBody*> Bodies;
 
 
-btBroadphaseInterface* broadphase = new btDbvtBroadphase();
-btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+void DynamicsWorldInit()
+{
+	CollisionConfiguration = new btDefaultCollisionConfiguration();
+	Dispatcher = new btCollisionDispatcher(CollisionConfiguration);
+	Broadphase = new btDbvtBroadphase();
+	Solver = new btSequentialImpulseConstraintSolver();
+	DynamicsWorld = new btDiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConfiguration);
+	DynamicsWorld->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+}
 
 
 
@@ -96,25 +113,10 @@ int main()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	Input.Awake();
+	DynamicsWorldInit();
 	World.Awake();
-	Sphere.Awake(); Sphere.Transform.Position = glm::vec3(-4.0f, 0.0f, 0.0f);
 
-
-	dynamicsWorld->setGravity(btVector3(0, -10, 0));
-
-	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
-	btCollisionShape* fallShape = new btSphereShape(1);
-	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -2, 0)));
-	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-	dynamicsWorld->addRigidBody(groundRigidBody);
-	btDefaultMotionState* fallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
-	btScalar mass = 1;
-	btVector3 fallInertia(0, 0, 0);
-	fallShape->calculateLocalInertia(mass, fallInertia);
-	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
-	btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
-	dynamicsWorld->addRigidBody(fallRigidBody);
+	
 
 
 		
@@ -124,47 +126,40 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (Input.GetKeyDown(GLFW_KEY_F)) Input.mouseControl ^= true;
 
 		Time.Update();
+
 		World.Update();
+
 
 		World.Render();
 
-		dynamicsWorld->stepSimulation(1 / 60.f, 10);
 
-		btTransform trans;
-		fallRigidBody->getMotionState()->getWorldTransform(trans);
-		Sphere.Transform.Position.y = trans.getOrigin().getY();
-		Sphere.Update();
-		Sphere.Render();
-
+		DynamicsWorld->stepSimulation(Time.deltaTime);
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
 	} while (Input.GetKey(GLFW_KEY_ESCAPE) == false && glfwWindowShouldClose(Window) == false);
 
+	World.Delete();
 
-	dynamicsWorld->removeRigidBody(fallRigidBody);
-	delete fallRigidBody->getMotionState();
-	delete fallRigidBody;
+	/*for (int i = 0; i < Bodies.size(); i++)
+	{
+		DynamicsWorld->removeCollisionObject(Bodies[i]);
+		btMotionState* motionState = Bodies[i]->getMotionState();
+		btCollisionShape* shape = Bodies[i]->getCollisionShape();
+		delete Bodies[i];
+		delete shape;
+		delete motionState;
+	}*/
 
-	dynamicsWorld->removeRigidBody(groundRigidBody);
-	delete groundRigidBody->getMotionState();
-	delete groundRigidBody;
-
-
-	delete fallShape;
-
-	delete groundShape;
-
-
-	delete dynamicsWorld;
-	delete solver;
-	delete collisionConfiguration;
-	delete dispatcher;
-	delete broadphase;
+	delete CollisionConfiguration;
+	delete Dispatcher;
+	delete Broadphase;
+	delete Solver;
+	delete DynamicsWorld;
 
 
 	glfwTerminate();
+	std::cout << "PROGRAM REACHED THIS POINT" << std::endl;
 	return 0;
 }

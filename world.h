@@ -3,6 +3,7 @@
 
 
 extern MShader Shader;
+extern MCamera Camera;
 class MWorld
 {
 protected:
@@ -10,12 +11,9 @@ protected:
 	MPlayer Player;
 	MSkybox Skybox;
 
-	MFloor Floor, Floor2;
-	MSuzanne Suzanne;
-	MCube Cube;
-	MRobot Robot;
+	MFloor Floor;
+	std::vector<MSphere> Spheres;
 public:
-	MSphere Sphere;
 	void Awake()
 	{
 		Shader.Create("red.vsh", "red.fsh", "red");
@@ -23,23 +21,28 @@ public:
 
 
 		Player.Awake();
-
-
-		Shader.Use("plain");
 		Skybox.Awake();
-
-
-		Shader.Use("red");
 		SunLight.Awake();
 
-		Cube.Awake();
 		Floor.Awake();
-		Suzanne.Awake();
-		Robot.Awake();
-		Sphere.Awake();
 	}
 	void Update()
 	{
+		if (Input.GetKeyDown(GLFW_KEY_F))
+		{
+			MSphere Sphere;
+			Sphere.Awake();
+			Sphere.setPosition(Camera.Transform.Position);
+			Sphere.setVelocity(Camera.Transform.GetFront() * 200.0f);
+			Spheres.push_back(Sphere);
+		}
+		if (Spheres.size() > 20)
+		{
+			Spheres[0].Delete();
+			Spheres.erase(Spheres.begin());
+		}
+
+
 		Player.Update();
 
 
@@ -49,12 +52,10 @@ public:
 
 		Shader.Use("red");
 		SunLight.Update();
-
-		Cube.Update();
 		Floor.Update();
-		Suzanne.Update();
-		Robot.Update();
-		Sphere.Update();
+		for (int i = 0; i < Spheres.size(); i++) {
+			Spheres[i].Update();
+		}
 	}
 	void Render()
 	{
@@ -65,12 +66,20 @@ public:
 		Shader.Use("red");
 		SunLight.Render();
 		Player.Render();
-
 		Floor.Render();
-		Suzanne.Render();
-		Cube.Render();
-		Robot.Render();
-		Sphere.Render();
+		for (int i = 0; i < Spheres.size(); i++) {
+			Spheres[i].Render();
+		}
+	}
+	void Delete()
+	{
+		Floor.Delete();
+		for (int i = 0; i < Spheres.size(); i++) {
+			Spheres[i].Delete();
+		}
+		while (!Spheres.empty()) {
+			Spheres.pop_back();
+		}
 	}
 };
 

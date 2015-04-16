@@ -45,7 +45,6 @@ public:
 			CameraMatrixID = glGetUniformLocation(Shader.ProgramID, "CameraMatrix");
 			glUniformMatrix4fv(CameraMatrixID, 1, GL_FALSE, &CameraMatrix[0][0]);
 		}
-		
 	}
 };
 
