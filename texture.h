@@ -61,7 +61,7 @@ protected:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		std::cout << "[COMPLETE]\n" << std::endl;
+		//std::cout << "[COMPLETE]\n" << std::endl;
 	}
 	void LoadDDS(const char * image_path)
 	{
@@ -138,7 +138,7 @@ protected:
 		}
 
 		free(buffer);
-		std::cout << "[COMPLETE]\n" << std::endl;
+		//std::cout << "[COMPLETE]\n" << std::endl;
 	}
 	bool FreeImageLoad(const char* image_path, bool generate_mipmaps = true)
 	{
@@ -184,7 +184,7 @@ protected:
 
 
 		FreeImage_Unload(dib);
-		std::cout << "[COMPLETE]\n" << std::endl;
+		//std::cout << "[COMPLETE]\n" << std::endl;
 		return true;
 	}
 	
@@ -204,7 +204,7 @@ public:
 	void Load(std::string image_path = "")
 	{
 		if (image_path.size() == 0) return;
-		std::cout << "Loading texture: " << image_path << std::endl;
+		//std::cout << "Loading texture: " << image_path << std::endl;
 		image_path = "Assets/textures/" + image_path;
 
 

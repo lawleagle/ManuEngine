@@ -32,5 +32,5 @@ void main()
 	vec3 Specular = materialColor * SunLight.Color * SunLight.Intensity * pow(cosAlpha, 5);
 	
 
-	color = Ambient + Diffuse + Specular;
+	color = Ambient + Diffuse;// + Specular;
 }

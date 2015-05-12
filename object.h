@@ -5,9 +5,9 @@ extern btDynamicsWorld* DynamicsWorld;
 class MObject
 {
 protected:
-	virtual void OnAwake() {}
-	virtual void OnUpdate() {}
-	virtual void OnRender() {}
+	virtual void onAwake() {}
+	virtual void onUpdate() {}
+	virtual void onRender() {}
 public:
 	MTransform Transform;
 	MCollision Collision;
@@ -37,11 +37,11 @@ public:
 	}
 	void Awake()
 	{
-		OnAwake();
+		onAwake();
 	}
 	void Update()
 	{
-		OnUpdate();
+		onUpdate();
 		if (Collision.isCreated == true)
 		{
 			float mat[16];
@@ -60,7 +60,7 @@ public:
 	}
 	void Render()
 	{
-		OnRender();
+		onRender();
 		if (hasTransparency) {
 			glEnable(GL_BLEND);
 			glDepthMask(0);

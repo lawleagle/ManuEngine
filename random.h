@@ -29,6 +29,10 @@ public:
 	{
 		return rand() % (dr - st) + st;
 	}
+	float getFloat(float st = 0, float dr = 100)
+	{
+		return (float)(rand() % ((int)(dr - st) * 100)) / 100 + (float)st;
+	}
 };
 
 

@@ -8,7 +8,8 @@ class MPlayer
 protected:
 public:
 	MTransform Transform;
-	float speed = 6.0f;
+	glm::vec3 Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	float speed = 18.0f;
 	float mouseSpeed = 10.1f;
 
 
@@ -26,6 +27,9 @@ public:
 		glm::vec3 Direction = Transform.GetFront();
 		glm::vec3 Right = Transform.GetRight();
 		glm::vec3 Up = glm::cross(Direction, Right);
+		Direction.y = 0.0f;
+		Right.y = 0.0f;
+		Up.y = 0.0f;
 
 
 		double mouseX, mouseY;
@@ -36,7 +40,7 @@ public:
 		if (Transform.Rotation.x < -90.0f) Transform.Rotation.x = -90.0f;
 		if (Transform.Rotation.x > 90.0f) Transform.Rotation.x = 90.0f;
 
-		speed *= (float)(1.0 + 0.08 * Input.GetScroll(SCROLL_Y));
+		//speed *= (float)(1.0 + 0.08 * Input.GetScroll(SCROLL_Y));
 
 		if (Input.GetKey(GLFW_KEY_W)) {
 			Transform.Position += Direction * Time.deltaTime * speed;

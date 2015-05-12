@@ -60,15 +60,15 @@ MCamera Camera;
 
 MWorld World;
 
-btDynamicsWorld* DynamicsWorld;
+/*btDynamicsWorld* DynamicsWorld;
 btDispatcher* Dispatcher;
 btCollisionConfiguration* CollisionConfiguration;
 btBroadphaseInterface* Broadphase;
 btConstraintSolver* Solver;
-std::vector<btRigidBody*> Bodies;
+std::vector<btRigidBody*> Bodies;*/
 
 
-void DynamicsWorldInit()
+/*void DynamicsWorldInit()
 {
 	CollisionConfiguration = new btDefaultCollisionConfiguration();
 	Dispatcher = new btCollisionDispatcher(CollisionConfiguration);
@@ -76,7 +76,7 @@ void DynamicsWorldInit()
 	Solver = new btSequentialImpulseConstraintSolver();
 	DynamicsWorld = new btDiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConfiguration);
 	DynamicsWorld->setGravity(btVector3(0.0f, -10.0f, 0.0f));
-}
+}*/
 
 
 
@@ -113,7 +113,7 @@ int main()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	Input.Awake();
-	DynamicsWorldInit();
+	//DynamicsWorldInit();
 	World.Awake();
 
 	
@@ -135,12 +135,12 @@ int main()
 		World.Render();
 
 
-		DynamicsWorld->stepSimulation(Time.deltaTime);
+		//DynamicsWorld->stepSimulation(Time.deltaTime);
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
 	} while (Input.GetKey(GLFW_KEY_ESCAPE) == false && glfwWindowShouldClose(Window) == false);
 
-	World.Delete();
+	//World.Delete();
 
 	/*for (int i = 0; i < Bodies.size(); i++)
 	{
@@ -152,11 +152,11 @@ int main()
 		delete motionState;
 	}*/
 
-	delete CollisionConfiguration;
+	/*delete CollisionConfiguration;
 	delete Dispatcher;
 	delete Broadphase;
 	delete Solver;
-	delete DynamicsWorld;
+	delete DynamicsWorld;*/
 
 
 	glfwTerminate();

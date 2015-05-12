@@ -83,7 +83,7 @@ public:
 	/// </summary>
 	void LoadOBJ(std::string file_path)
 	{
-		std::cout << "Loading OBJ mesh: " << file_path << std::endl;
+		//std::cout << "Loading OBJ mesh: " << file_path << std::endl;
 		file_path = "Assets/models/" + file_path;
 
 		FILE* file = fopen(file_path.c_str(), "rb");
@@ -162,11 +162,11 @@ public:
 			normals.push_back(normal);
 		}
 		unindexed = true;
-		std::cout << "[COMPLETE]\n" << std::endl;
+		//std::cout << "[COMPLETE]\n" << std::endl;
 	}
 	void Load(std::string file_path)
 	{
-		std::cout << "Loading OBJ mesh: " << file_path << std::endl;
+		//std::cout << "Loading OBJ mesh: " << file_path << std::endl;
 		file_path = "Assets/models/" + file_path;
 		
 		Assimp::Importer importer;
@@ -177,7 +177,7 @@ public:
 		}
 
 		recursiveMeshProcess(scene->mRootNode, scene);
-		std::cout << "[COMPLETE]\n" << std::endl;
+		//std::cout << "[COMPLETE]\n" << std::endl;
 	}
 
 	void Update()
@@ -234,6 +234,14 @@ public:
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
+
+		glDeleteVertexArrays(1, &VertexArrayID);
+		glDeleteBuffers(1, &vertexbuffer);
+		glDeleteBuffers(1, &uvbuffer);
+		glDeleteBuffers(1, &normalbuffer);
+		if (unindexed == false) {
+			glDeleteBuffers(1, &elementbuffer);
+		}
 	}
 };
 
