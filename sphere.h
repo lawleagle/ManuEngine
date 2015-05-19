@@ -19,8 +19,7 @@ public:
 		Transform.Position.x = position.x;
 		Transform.Position.y = position.y;
 		Transform.Position.z = position.z;
-
-		//Collision.CreateCollisionMesh(COLLISION_SPHERE, 1.0f, glm::vec3(Transform.Position.x, Transform.Position.y, Transform.Position.z), 1.0f);
+		Collision.CreateCollisionMesh(COLLISION_SPHERE, 1.0f, glm::vec3(Transform.Position.x, Transform.Position.y, Transform.Position.z), 1.0f);
 	}
 	void setVelocity(glm::vec3 velocity)
 	{

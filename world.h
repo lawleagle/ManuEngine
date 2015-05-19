@@ -11,13 +11,9 @@ protected:
 	MPlayer Player;
 	MSkybox Skybox;
 
-	std::vector<MAsteroid> Asteroids;
-	std::vector<glm::vec3> Directions;
-	float angle = 1.57f;
-
-
-	glm::vec3 gravity = glm::vec3(0.0f, -25.0f, 0.0f);
-	bool started = false;
+	MFloor Floor;
+	std::vector<MSphere> spheres;
+	std::vector<MCube> cubes;
 public:
 	void Awake()
 	{
@@ -25,35 +21,25 @@ public:
 		Shader.Create("plain.vsh", "plain.fsh", "plain");
 
 
-		Player.Awake(); Player.Transform.Position = glm::vec3(0.0f, 1050.0f, 0.0f);
+		Player.Awake(); Player.Transform.Position = glm::vec3(0.0f, 5.0f, 0.0f);
 		Skybox.Awake();
 		SunLight.Awake();
-		//Boundry.Awake();
+
+		for (int i = 1; i <= 10; i++) {
+			for (int j = 1; j <= 10; j++) {
+				MCube Cube; Cube.Awake(glm::vec3(2 * i, 2 * j, -10));
+				cubes.push_back(Cube);
+			}
+		}
 
 
 		// From here on it's awaking the objects
-		for (int i = 1; i <= 100; i++) {
-			int nr = Random.getInt(1, 5);
-			for (int j = 1; j <= nr; j++) {
-				MAsteroid Asteroid;
-				Asteroid.Transform.Position = glm::vec3(Random.getFloat(-50.0f, 50.0f), i * 10.0f + Random.getFloat(-5.0f, 5.0f), Random.getFloat(-50.0f, 50.0f));
-				Asteroid.Transform.Scale = glm::vec3(Random.getFloat(1.0f, 15.0f), 1.0f, Random.getFloat(1.0f, 15.0f));
-				Asteroids.push_back(Asteroid);
-
-				Directions.push_back(glm::vec3(Random.getFloat(0.0f, 10.0f), 0.0f, Random.getFloat(0.0f, 10.0f)));
-			}
-		}
+		Floor.Awake();
 	}
 	void Update()
 	{
-		if (!started) Player.Transform.Position = glm::vec3(0.0f, 1050.0f, 0.0f);
-		if (Input.GetKey(GLFW_KEY_F)) started = true;
-		if (started == true) {
-			Player.Velocity += gravity * Time.deltaTime;
-		}
 		Player.Transform.Position += Player.Velocity * Time.deltaTime;
 		Player.Update();
-		
 
 
 
@@ -66,23 +52,24 @@ public:
 
 		
 		// From here on it's the updating of objects.
-		for (size_t i = 0; i < Asteroids.size(); i++) {
-			if (Asteroids[i].Transform.Position.y - 10.0f > Player.Transform.Position.y)
-			{
-				Asteroids[i].Transform.Position.y -= 1000.0f;
-			}
-			if (Asteroids[i].Collides(Player.Transform.Position)) {
-				Player.Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
-				Player.Transform.Position = glm::vec3(0.0f, 1050.0f, 0.0f);
-				started = false;
-				for (size_t i = 0; i < Asteroids.size(); i++) {
-					while (Asteroids[i].Transform.Position.y <= 0.0f) Asteroids[i].Transform.Position.y += 1000.0f;
-				}
-			}
-			Asteroids[i].Transform.Position += Directions[i] * sin(angle) * Time.deltaTime;
-			Asteroids[i].Update();
+		if (Input.GetKeyDown(GLFW_KEY_F)) {
+			MSphere Sphere; Sphere.Awake(Camera.Transform.Position);
+			Sphere.setVelocity(Camera.Transform.GetFront() * 50.0f);
+			spheres.push_back(Sphere);
 		}
-		angle += 0.01f;
+		if (Input.GetKeyDown(GLFW_KEY_C)) {
+			MCube Cube; Cube.Awake(Camera.Transform.Position);
+			Cube.setVelocity(Camera.Transform.GetFront() * 1.0f);
+			cubes.push_back(Cube);
+		}
+
+		Floor.Update();
+		for (int i = 0; i < spheres.size(); i++) {
+			spheres[i].Update();
+		}
+		for (int i = 0; i < cubes.size(); i++) {
+			cubes[i].Update();
+		}
 	}
 	void Render()
 	{
@@ -92,12 +79,15 @@ public:
 
 		Shader.Use("red");
 		SunLight.Render();
-		Player.Render();
 
 		
 		// From here on it's the rendering of objects.
-		for (size_t i = 0; i < Asteroids.size(); i++) {
-			Asteroids[i].Render();
+		Floor.Render();
+		for (int i = 0; i < spheres.size(); i++) {
+			spheres[i].Render();
+		}
+		for (int i = 0; i < cubes.size(); i++) {
+			cubes[i].Render();
 		}
 	}
 	void Delete()

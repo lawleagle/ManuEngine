@@ -5,12 +5,12 @@
 class MCube : public MObject
 {
 protected:
-	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 down = glm::vec3(0.0f, -1.0f, 0.0f);
-	glm::vec3 left = glm::vec3(-1.0f, 0.0f, 0.0f);
-	glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
-	glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 back = glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 up = glm::vec3(0.0f, 2.0f, 0.0f);
+	glm::vec3 down = glm::vec3(0.0f, -2.0f, 0.0f);
+	glm::vec3 left = glm::vec3(-2.0f, 0.0f, 0.0f);
+	glm::vec3 right = glm::vec3(2.0f, 0.0f, 0.0f);
+	glm::vec3 front = glm::vec3(0.0f, 0.0f, -2.0f);
+	glm::vec3 back = glm::vec3(0.0f, 0.0f, 2.0f);
 	glm::vec3 zero = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	std::vector< glm::vec3 > verts;
@@ -45,11 +45,11 @@ protected:
 		tris.push_back(index + 1);
 	}
 public:
-	void OnAwake()
+	void Awake(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f))
 	{
+		MObject::Awake();
 		Texture.Load("snow.jpg");
-		Transform.Position.x = 1.0f;
-		glm::vec3 offset(-0.5f, -0.5f, +0.5f);
+		glm::vec3 offset(-1.0f, -1.0f, +1.0f);
 		BuildFace(zero + offset, right, up);
 		BuildFace(right + offset, front, up);
 		BuildFace(right + front + offset, left, up);
@@ -61,12 +61,20 @@ public:
 		Mesh.normals = normals;
 		Mesh.uvs = uvs;
 		Mesh.tris = tris;
+
+
+		Transform.Position = position;
+		Collision.CreateCollisionMesh(COLLISION_CUBE, 2.0f, 2.0f, 2.0f, glm::vec3(Transform.Position.x, Transform.Position.y, Transform.Position.z), 10.0f);
 	}
 	void OnUpdate()
 	{
-		Transform.Rotation.y++;
-		Transform.Rotation.z++;
-		Transform.Rotation.x++;
+	}
+	void setVelocity(glm::vec3 velocity)
+	{
+		if (Collision.isCreated)
+		{
+			Collision.RigidBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+		}
 	}
 
 };

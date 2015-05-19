@@ -57,9 +57,7 @@ protected:
 	
 
 
-	void onAwake()
-	{
-	}
+	
 	void onUpdate()
 	{
 		/*gravity = Camera.Transform.Position - Transform.Position; gravity /= 100; gravity = glm::normalize(gravity);
@@ -71,7 +69,7 @@ protected:
 		//std::cout << Transform.Position.x << ' ' << Transform.Position.y << ' ' << Transform.Position.z << std::endl;
 	}
 public:
-	MAsteroid(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3 speed = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f))
+	void Awake(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3 speed = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f))
 	{
 		MObject::Awake();
 		Texture.Load("rust.jpg");

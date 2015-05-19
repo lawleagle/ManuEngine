@@ -27,9 +27,9 @@ public:
 		glm::vec3 Direction = Transform.GetFront();
 		glm::vec3 Right = Transform.GetRight();
 		glm::vec3 Up = glm::cross(Direction, Right);
-		Direction.y = 0.0f;
+		/*Direction.y = 0.0f;
 		Right.y = 0.0f;
-		Up.y = 0.0f;
+		Up.y = 0.0f;*/
 
 
 		double mouseX, mouseY;
@@ -39,7 +39,7 @@ public:
 		Transform.Rotation.x -= mouseSpeed * Time.deltaTime * (float)mouseY;
 		if (Transform.Rotation.x < -90.0f) Transform.Rotation.x = -90.0f;
 		if (Transform.Rotation.x > 90.0f) Transform.Rotation.x = 90.0f;
-
+		
 		//speed *= (float)(1.0 + 0.08 * Input.GetScroll(SCROLL_Y));
 
 		if (Input.GetKey(GLFW_KEY_W)) {
