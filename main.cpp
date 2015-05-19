@@ -45,6 +45,7 @@
 	#include "robot.h"
 	#include "sphere.h"
 	#include "asteroid.h"
+	#include "spaceship.h"
 #include "skybox.h"
 #include "player.h"
 #include "world.h"
@@ -75,7 +76,7 @@ void DynamicsWorldInit()
 	Broadphase = new btDbvtBroadphase();
 	Solver = new btSequentialImpulseConstraintSolver();
 	DynamicsWorld = new btDiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConfiguration);
-	DynamicsWorld->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+	DynamicsWorld->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 }
 
 

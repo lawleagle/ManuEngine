@@ -86,6 +86,7 @@
     <ClInclude Include="robot.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="skybox.h" />
+    <ClInclude Include="spaceship.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="suzanne.h" />
     <ClInclude Include="texture.h" />

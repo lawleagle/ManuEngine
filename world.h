@@ -14,27 +14,31 @@ protected:
 	MFloor Floor;
 	std::vector<MSphere> spheres;
 	std::vector<MCube> cubes;
+	MSpaceship Spaceship;
 public:
 	void Awake()
 	{
 		Shader.Create("red.vsh", "red.fsh", "red");
 		Shader.Create("plain.vsh", "plain.fsh", "plain");
+		Shader.Create("specular.vsh", "specular.fsh", "specular");
 
 
 		Player.Awake(); Player.Transform.Position = glm::vec3(0.0f, 5.0f, 0.0f);
 		Skybox.Awake();
 		SunLight.Awake();
 
+		
+
+
+		// From here on it's awaking the objects
+		Floor.Awake();
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
 				MCube Cube; Cube.Awake(glm::vec3(2 * i, 2 * j, -10));
 				cubes.push_back(Cube);
 			}
 		}
-
-
-		// From here on it's awaking the objects
-		Floor.Awake();
+		Spaceship.Awake();
 	}
 	void Update()
 	{
@@ -70,6 +74,7 @@ public:
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].Update();
 		}
+		Spaceship.Update();
 	}
 	void Render()
 	{
@@ -79,16 +84,19 @@ public:
 
 		Shader.Use("red");
 		SunLight.Render();
+		Floor.Render();
 
 		
 		// From here on it's the rendering of objects.
-		Floor.Render();
+		Shader.Use("specular");
+		SunLight.Render();
 		for (int i = 0; i < spheres.size(); i++) {
 			spheres[i].Render();
 		}
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].Render();
 		}
+		//Spaceship.Render();
 	}
 	void Delete()
 	{

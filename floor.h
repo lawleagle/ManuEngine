@@ -9,7 +9,7 @@ public:
 	void onAwake()
 	{
 		//Texture.Load("blueice.jpg");
-		Texture.Load("blueice.jpg");
+		Texture.Load("tron.jpg");
 
 		Mesh.verts = {
 			glm::vec3(-10000.0f, 0.0f, 10000.0f),
