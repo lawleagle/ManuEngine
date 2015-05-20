@@ -23,8 +23,8 @@ public:
 		Shader.Create("specular.vsh", "specular.fsh", "specular");
 
 
-		Player.Awake(); Player.Transform.Position = glm::vec3(0.0f, 5.0f, 0.0f);
-		Skybox.Awake();
+		Player.Awake();
+		//Skybox.Awake();
 		SunLight.Awake();
 
 		
@@ -42,13 +42,12 @@ public:
 	}
 	void Update()
 	{
-		Player.Transform.Position += Player.Velocity * Time.deltaTime;
 		Player.Update();
 
 
 
 		Shader.Use("plain");
-		Skybox.Update(Player.Transform.Position);
+		//Skybox.Update(Player.Transform.Position);
 
 
 		Shader.Use("red");
@@ -56,9 +55,14 @@ public:
 
 		
 		// From here on it's the updating of objects.
-		if (Input.GetKeyDown(GLFW_KEY_F)) {
-			MSphere Sphere; Sphere.Awake(Camera.Transform.Position);
-			Sphere.setVelocity(Camera.Transform.GetFront() * 50.0f);
+		if (Input.GetKeyDown(GLFW_KEY_KP_6)) {
+			MSphere Sphere; Sphere.Awake(Spaceship.Transform.Position + glm::vec3(4.0f, 0.5f, 0.0f));
+			Sphere.setVelocity(glm::vec3(0.0f, 0.0f, -1.0f) * 50.0f + Player.velocity);
+			spheres.push_back(Sphere);
+		}
+		if (Input.GetKeyDown(GLFW_KEY_KP_4)) {
+			MSphere Sphere; Sphere.Awake(Spaceship.Transform.Position + glm::vec3(-4.0f, 0.5f, 0.0f));
+			Sphere.setVelocity(glm::vec3(0.0f, 0.0f, -1.0f) * 50.0f + Player.velocity * Player.speed);
 			spheres.push_back(Sphere);
 		}
 		if (Input.GetKeyDown(GLFW_KEY_C)) {
@@ -79,7 +83,7 @@ public:
 	void Render()
 	{
 		Shader.Use("plain");
-		Skybox.Render();
+		//Skybox.Render();
 
 
 		Shader.Use("red");
@@ -96,7 +100,7 @@ public:
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].Render();
 		}
-		//Spaceship.Render();
+		Spaceship.Render();
 	}
 	void Delete()
 	{

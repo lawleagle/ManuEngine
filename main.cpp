@@ -100,6 +100,7 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(Window);
+	glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	glewExperimental = true;
 	if (glewInit() != GLEW_OK) {
@@ -124,7 +125,7 @@ int main()
 
 	
 	do {
-		glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
